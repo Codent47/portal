@@ -45,4 +45,17 @@ class Leave(models.Model):
     def __str__(self):
         return self.student.bitsId + ' '+ self.student.name + ' ' + str(self.id)
 
+class Transcript(models.Model):
+    bitsID = models.CharField(max_length=13,null=True, blank=True)
+    corrEmail = models.CharField(max_length=50)
+    refNo = models.CharField(max_length=20)
+    approved = models.BooleanField(default=0, blank=True)
+    disapproved = models.BooleanField(default=0, blank=True)
+    inprocess = models.BooleanField(default=1, blank=True)
+    dupTranscripts = models.IntegerField(default=0, blank=True)
+
+    def __str__(self):
+        return self.bitsID + ' '+ self.refNo
+
+
 

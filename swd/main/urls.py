@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^hod/$', views.hod, name="hod"),
     url(r'^hostelsuperintendent/$', views.faculty, name="faculty"),
     url(r'^leave/', views.leave, name="leave"),
-    
+    url(r'^transcript/', views.transcript, name="transcript")
     # url(r'^warden/([0-9]+)/$', views.wardenleaveapprove, name="wardenleaveapprove"),
     # url(r'^hostelsuperintendent/([0-9]+)/$', views.hostelsuperintendentdaypassapprove, name="hostelsuperintendentdaypassapprove"),
     # url(r'^student/(?P<id>\d+)/$',views.studentDetails, name="studentDetails"),

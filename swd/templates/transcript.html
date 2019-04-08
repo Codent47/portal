@@ -1,0 +1,111 @@
+{% extends 'indexbase.html' %} {% block content %}
+
+
+<div>
+    <div class="section">
+
+        <!--   Icon Section   -->
+        <div class="row">
+            <div class="col s6 l6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Apply for Transcripts</span>
+                        {% if option == 0 %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                {% for field in form %}
+                                  <div class="input-field col s12">
+                                    {{ field }} {{ field.label_tag }}
+                                  </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-block bg-green waves-effect" type="submit">SUBMIT</button>
+                            </div>
+                        </form>
+                        {% elif option == 1 %}
+                            <p>Transcript Successfully applied. Please wait for approval</p>
+                            <p>Your Reference Number is {{ refno }} </p>
+                        {% else %}
+                            {% if form.errors %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="red-text alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class=red-text>
+                            <p>There was a problem with form submission. Please refill.</p>
+                            <h1></h1></div>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    {% for field in form %}
+                                        {% if form.errors %}
+                                        {% for error in field.errors %}
+                                            <div class="red-text alert alert-danger">
+                                                <strong>{{ error|escape }}</strong>
+                                            </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <div class="input-field col s12">
+                                            {{ field }} {{ field.label_tag }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-block bg-green waves-effect" type="submit">SUBMIT</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s6 l6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Transcript Applications</span>
+                        <table class="striped">
+                            <thead>
+                                <tr>
+                                    <th class="center-align">Reference Number</th>
+                                    <th class="center-align">Approval Status</th>
+                                    <th class="center-align">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transcript in transcripts %}
+                                <tr>
+                                    <td class="center-align">{{ transcript.refno }}</td>
+                                    <td class="center-align badge-container">
+                                        {% if transcript.approved == 1%}
+                                        <span class="new badge green comm" data-badge-caption="Approved"></span> {% elif transcript.disapproved == 1 %}
+                                        <span class="new badge red comm" data-badge-caption="Not Approved"></span> {% else %}
+                                        <span class="new badge blue comm" data-badge-caption="In Process"></span> {% endif %}
+                                    </td>
+                                    <!-- <td class="center-align">{{ transcript.comment }}</td> -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <br><br>
+</div>
+<style>
+  .comm {
+    width:100px;
+  }
+  .badge-container {
+      width: 35%;
+      padding-right:9%;
+  }
+</style>
+{% endblock %}

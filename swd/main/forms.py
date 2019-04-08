@@ -1,8 +1,42 @@
 from django import forms
 from .models import Leave
+from .models import Transcript
+
 from django.forms.widgets import TextInput, Textarea
 from django.utils.translation import ugettext_lazy as _
 from datetime import date, datetime
+
+class TranscriptForm(forms.ModelForm):
+    idNo = forms.CharField(label='ID Number:', widget=TextInput(attrs={'type':'string'}))
+    name = forms.CharField(label='Name:', widget=TextInput(attrs={'type':'string'}))
+    hostel = forms.CharField(label='Hostel:', widget=TextInput(attrs={'type':'string'}))
+    roomNo = forms.CharField(label='Room Number:', widget=TextInput(attrs={'type':'string'}))
+    ps2Station = forms.CharField(label='In PS-2 at (none if not at ps-2):', widget=TextInput(attrs={'type':'string'}))
+    email = forms.EmailField(label='E-mail:', widget=TextInput(attrs={'type':'string'}))
+    phone_number = forms.CharField(label='Contact No:', widget=TextInput(attrs={'type':'number'}))
+    origTranscript = forms.IntegerField(label='Original Continuing Transcripts:', widget=TextInput(attrs={'type':'number'}))
+    dupTranscript = forms.IntegerField(label='Additional Duplicate Transcripts:', widget=TextInput(attrs={'type':'number'}))
+    forwardingLetters = forms.IntegerField(label='Number of forwarding letters:', widget=TextInput(attrs={'type':'number'}))
+    post_doc = forms.CharField(label='Please post the documents to:', widget=TextInput(attrs={'type':'string'}))
+    refno = forms.CharField(label='Reference No:', widget=TextInput(attrs={'type':'string'}))          
+    #amt = F(origTranscript * 200 ) + F( dupTranscript * 100) 
+    
+    def clean(self):
+        cleaned_data = super(TranscriptForm, self).clean()
+        if (len(cleaned_data['phone_number']) > 10):
+            self.add_error('phone_number', "Phone No. can't be longer than 10 numbers")
+
+    class Meta:
+        model = Transcript
+        exclude = ['disapproved', 'inprocess', 'approved']
+        #widgets = {
+        #    'reason': forms.Textarea(attrs={'class': 'materialize-textarea validate'}),
+        #    'corrAddress': forms.Textarea(attrs={'class': 'materialize-textarea validate'}),
+        #}
+        labels = {
+            'dupTranscript': _('Number of duplicate transcripts'),
+        }
+
 
 
 class LeaveForm(forms.ModelForm):

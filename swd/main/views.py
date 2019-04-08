@@ -14,6 +14,7 @@ from braces import views
 from django.contrib.auth.models import User
 from django.db.models import Q
 from .forms import LeaveForm
+from .forms import TranscriptForm
 
 
 def is_hod(user):
@@ -161,5 +162,56 @@ def leave(request):
             print(form.errors)
     return render(request, "leave.html", dict(context, **leaveContext))
 
+def transcript(request):
+    #student = Student.objects.get(user=request.user)
+    form = TranscriptForm()
+    context = {
+        'option' : 0,
+        #'student': student,
+        'form': form
+    }
+
+    transcriptContext = {
+        #'transcripts': Transcript.objects.filter(student=student),
+    }
+
+    if request.POST:
+        form = TranscriptForm(request.POST)
+        if form.is_valid():
+            transcriptform = form.save(commit=False)
+            transcriptform.corrId = request.POST.get('idNo')
+            transcriptform.corrname = request.POST.get('name')
+            transcriptform.corrhostel = request.POST.get('hostel')
+            transcriptform.corrroomNo = request.POST.get('roomNo')
+            transcriptform.ps2Station = request.POST.get('ps2Station')
+            transcriptform.email = request.POST.get('email')
+            transcriptform.phone_number = request.POST.get('phone_number')
+            transcriptform.origTranscript = request.POST.get('origTranscript')
+            transcriptform.dupTranscript = request.POST.get('dupTranscript')
+            transcriptform.forwardingLetters = request.POST.get('forwardingLetters')
+            transcriptform.post_doc = request.POST.get('post_doc')
+            transcriptform.refno = request.POST.get('refno')
+            #transcriptform.dateTimeStart = make_aware(dateTimeStart)
+            #leaveform.dateTimeEnd = make_aware(dateTimeEnd)
+            
+            #transcriptform.amtcal=200*origTranscript+(100*dupTranscript)
+            
+            #transcriptform.student = student
+            print(request.POST.get('refno'))
+    
+            transcriptform.save()
+
+            context = {
+                'option': 1,
+                'idNo': request.POST.get('idNo'),
+                'dupTranscript': request.POST.get('dupTranscript'),
+            }
+        else:
+            context = {
+                'option': 2,
+                'form': form
+            }
+            print(form.errors)
+    return render(request, "transcript.html", dict(context, **transcriptContext))
 
 

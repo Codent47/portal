@@ -16,6 +16,7 @@ from .config import PRODUCTION, DB_NAME, DB_PASSWORD, DB_USER
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PRODUCTION = False
 
 from tools.dev_info import SECRET_KEY
 
